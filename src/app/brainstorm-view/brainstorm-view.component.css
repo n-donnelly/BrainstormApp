@@ -1,0 +1,13 @@
+#brainstorm-view {
+    width: 78%;
+    height: 90%;
+    float: left;
+    border: 1px solid lightgray;
+}
+
+idea-detail-view {
+    width: 20%;
+    height: 90%;
+    border: 1px solid silver;
+    float: right;
+}
