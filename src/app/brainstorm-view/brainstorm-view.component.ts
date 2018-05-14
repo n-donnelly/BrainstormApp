@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { IdeaService } from '../services/idea.service'
 import { Idea } from '../model/idea'
 import { IdeaList } from '../model/ideaList'
+import { IdeaDetailViewComponent } from '../idea-detail-view/idea-detail-view.component';
 
 declare var vis: any;
 
@@ -15,6 +16,8 @@ export class BrainstormViewComponent implements OnInit {
 
   nodes: any;
   edges: any;
+
+  public ideaDetailCallback: Function;
 
   ideas: IdeaList;
   selectedIdea: Idea;
@@ -41,6 +44,7 @@ export class BrainstormViewComponent implements OnInit {
   ngOnInit() {
     var alias = this;
     var container = document.getElementById('brainstorm-view');
+    this.ideaDetailCallback = this.updateNodeLabel.bind(this);
 
     this.ideaService.getRoot().subscribe((root: Idea) => this.initIdeas(root));
 
@@ -51,8 +55,6 @@ export class BrainstormViewComponent implements OnInit {
     var container = document.getElementById('brainstorm-view');
     var network = new vis.Network(container, data, this.options);
     network.on("click", function (params){
-      console.log(params.nodes);
-      console.log(data.nodes);
       alias.updateSelectedIdea(params.nodes[0]);
     });
   }
@@ -62,11 +64,14 @@ export class BrainstormViewComponent implements OnInit {
     console.log(this.selectedIdea);
   }
 
+  updateNodeLabel() {
+    this.nodes.update({id:this.selectedIdea.id, label:this.selectedIdea.title});
+    console.log(this.nodes);
+  }
+
   initIdeas(root: Idea) {
     this.ideas = new IdeaList( root );
     this.selectedIdea = this.ideas.getIdeaFromIndex(0);
-    console.log(this.selectedIdea);
-    console.log(this.ideas);
     this.loadIdeas();
   }
 

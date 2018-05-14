@@ -1,6 +1,9 @@
 <div *ngIf="idea">
 
-  <h2>{{ idea.title }}</h2>
-  <div>{{idea.description}}</div>
+  <!--h2>{{ idea.title }}</h2-->
+  <input [(ngModel)]="idea.title" id="idea_title_input" placeholder="{{idea.title}}">
+  <textarea [(ngModel)]="idea.description" id="idea_desc_input" placeholder="{{idea.description}}" name="description" cols="24" rows="12"></textarea>
+  <!--div>{{idea.description}}</div-->
 
+  <button (click)="updateIdea()">Update</button>
 </div>

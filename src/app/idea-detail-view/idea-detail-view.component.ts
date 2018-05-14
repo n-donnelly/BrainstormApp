@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, OnChanges, Output } from '@angular/core';
 import { Idea } from '../model/idea';
 
 @Component({
@@ -9,6 +9,7 @@ import { Idea } from '../model/idea';
 export class IdeaDetailViewComponent implements OnInit, OnChanges {
 
   @Input() idea: Idea;
+  @Output() labelUpdate: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -18,5 +19,12 @@ export class IdeaDetailViewComponent implements OnInit, OnChanges {
   ngOnChanges() {
     console.log("Changed: ", this.idea.title);
     console.log(this.idea);
+  }
+
+  updateIdea() {
+    console.log("Updating idea!");
+    this.idea.title = (<HTMLInputElement>document.getElementById('idea_title_input')).value;
+    this.idea.description = (<HTMLInputElement>document.getElementById('idea_desc_input')).value;
+    this.labelUpdate.emit();
   }
 }
