@@ -3,4 +3,10 @@
 
     </div>
 </div>
-<idea-detail-view [idea]="selectedIdea" (labelUpdate)='updateNodeLabel()'></idea-detail-view>
+<idea-detail-view id="idea-view" 
+    [idea]="selectedIdea" 
+    (labelUpdate)='updateNodeLabel()'
+    (createIdea)='createIdea()'
+    (removeIdea)='removeIdea()'></idea-detail-view>
+    
+<quick-view id="quick-view" [idea]="hoverIdea"></quick-view>

@@ -1,13 +1,20 @@
 #brainstorm-view {
-    width: 78%;
+    width: 95%;
     height: 90%;
     float: left;
     border: 1px solid lightgray;
+    margin-left: 2%;
 }
 
 idea-detail-view {
-    width: 20%;
-    height: 90%;
     border: 1px solid silver;
-    float: right;
+    position: absolute;
+    visibility: hidden;
+}
+
+quick-view {
+    border: 1px solid silver;
+    position: absolute;
+    visibility: hidden;
+    background-color: whitesmoke;
 }

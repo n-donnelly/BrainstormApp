@@ -10,6 +10,8 @@ export class IdeaDetailViewComponent implements OnInit, OnChanges {
 
   @Input() idea: Idea;
   @Output() labelUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() createIdea: EventEmitter<any> = new EventEmitter();
+  @Output() deleteIdea: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -26,5 +28,15 @@ export class IdeaDetailViewComponent implements OnInit, OnChanges {
     this.idea.title = (<HTMLInputElement>document.getElementById('idea_title_input')).value;
     this.idea.description = (<HTMLInputElement>document.getElementById('idea_desc_input')).value;
     this.labelUpdate.emit();
+  }
+
+  addIdea() {
+    console.log("Adding idea");
+    this.createIdea.emit();
+  }
+
+  removeIdea() {
+    console.log("Removing idea");
+    this.deleteIdea.emit();
   }
 }
