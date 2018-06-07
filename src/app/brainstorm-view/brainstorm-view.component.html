@@ -6,7 +6,14 @@
 <idea-detail-view id="idea-view" 
     [idea]="selectedIdea" 
     (labelUpdate)='updateNodeLabel()'
-    (createIdea)='createIdea()'
-    (removeIdea)='removeIdea()'></idea-detail-view>
+    (createIdea)='showAddView()'
+    (removeIdea)='showRemoveView()'></idea-detail-view>
     
 <quick-view id="quick-view" [idea]="hoverIdea"></quick-view>
+
+<div id="add-view">
+    <h2>Create New Idea</h2>
+    <input id="idea_title_input" placeholder="New Idea">
+    <button (click)="createIdea()">Create</button>
+    <button (click)="hideAddIdeaView()">Cancel</button>
+</div>

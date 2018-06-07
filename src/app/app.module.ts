@@ -8,15 +8,13 @@ import { BrainstormViewComponent } from './brainstorm-view/brainstorm-view.compo
 import { IdeaDetailViewComponent } from './idea-detail-view/idea-detail-view.component';
 import { IdeaService } from './services/idea.service';
 import { QuickViewComponent } from './quick-view/quick-view.component';
-import { IdeaAddComponent } from './idea-add/idea-add.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BrainstormViewComponent,
     IdeaDetailViewComponent,
-    QuickViewComponent,
-    IdeaAddComponent
+    QuickViewComponent
   ],
   imports: [
     FormsModule,

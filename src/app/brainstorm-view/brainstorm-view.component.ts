@@ -22,6 +22,7 @@ export class BrainstormViewComponent implements OnInit {
   ideas: IdeaList;
   selectedIdea: Idea;
   hoverIdea: Idea;
+  newIdeaTitle: string;
 
   currentIndex: number;
 
@@ -58,16 +59,21 @@ export class BrainstormViewComponent implements OnInit {
     var network = new vis.Network(container, data, this.options);
     network.on("click", function (params){
       if(params.nodes.length > 0) {
+        alias.hideAllViews();
         alias.updateSelectedIdea(params.nodes[0]);
         alias.showDetailView(params.pointer);
       } else {
-        alias.hideDetailView();
+        alias.hideAllViews();
       }
+    });
+
+    network.on("dragStart", function (params){
+      alias.hideAllViews();
     });
 
     network.on("hoverNode", function (params) {
       alias.updateHoveredIdea(params.node);
-      alias.drawElementAt('quick-view', params.pointer);
+      //alias.drawElementAt('quick-view', params.pointer);
     });
 
     network.on("blurNode", function(params) {
@@ -76,11 +82,31 @@ export class BrainstormViewComponent implements OnInit {
   }
 
   showDetailView(pointer: any) {
-    this.drawElementAt('idea-view', pointer);
+    this.drawElementAdjustedAt('idea-view', pointer);
     this.hideQuickView();
   }
 
-  drawElementAt(elementId: string, pointer: any) {
+  showAddView() {
+    var pointer = this.getPointerFromElement('detail-view');
+    this.hideAllViews();
+    this.drawElementAt('add-view', pointer);
+  }
+
+  getPointerFromElement(elementId: string) {
+    var elem = document.getElementById('idea-view');
+    var xStr = document.getElementById('idea-view').style.left;
+    var yStr = document.getElementById('idea-view').style.top;
+
+    return ({'DOM':{x:xStr.substring(0, xStr.length-2), y:yStr.substring(0, yStr.length-2)}});
+  }
+
+  drawElementAt(elementId: string, pointer: any){
+    document.getElementById(elementId).style.visibility="visible";
+    document.getElementById(elementId).style.top=pointer.DOM.y+'px';
+    document.getElementById(elementId).style.left=pointer.DOM.x+'px';
+  }
+
+  drawElementAdjustedAt(elementId: string, pointer: any) {
     document.getElementById(elementId).style.visibility="visible";
     var canvas_width = document.getElementById('brainstorm-view').offsetWidth;
     var canvas_height = document.getElementById('brainstorm-view').offsetHeight;
@@ -99,8 +125,15 @@ export class BrainstormViewComponent implements OnInit {
     document.getElementById(elementId).style.left=x_pos+'px';
   }
 
+  hideAllViews() {
+    this.hideAddIdeaView();
+    this.hideDetailView();
+    this.hideQuickView();
+  }
+
   hideAddIdeaView() {
-    
+    this.newIdeaTitle = '';
+    document.getElementById('add-view').style.visibility="hidden";
   }
 
   hideDetailView() {
@@ -108,8 +141,8 @@ export class BrainstormViewComponent implements OnInit {
   }
 
   hideQuickView() {
-    console.log("Hiding quick view");
-    document.getElementById('quick-view').style.visibility="hidden";
+    //console.log("Hiding quick view");
+    //document.getElementById('quick-view').style.visibility="hidden";
   }
 
   updateSelectedIdea(index: number) {
@@ -128,7 +161,12 @@ export class BrainstormViewComponent implements OnInit {
   }
 
   createIdea() {
-    console.log("Creating idea");
+    console.log("Creating idea: " + this.newIdeaTitle);
+    var newIdea = new Idea(this.currentIndex++, this.newIdeaTitle, this.selectedIdea);
+    this.selectedIdea.addChild(newIdea);
+    this.nodes.add({id: newIdea.id, label: newIdea.title });
+    this.edges.add( {from: newIdea.parent.id, to: newIdea.id });
+    this.hideAddIdeaView();
   }
 
   removeIdea() {

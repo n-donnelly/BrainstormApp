@@ -18,3 +18,10 @@ quick-view {
     visibility: hidden;
     background-color: whitesmoke;
 }
+
+#add-view {
+    border: 1px solid silver;
+    position: absolute;
+    visibility: hidden;
+    background-color: whitesmoke;
+}
