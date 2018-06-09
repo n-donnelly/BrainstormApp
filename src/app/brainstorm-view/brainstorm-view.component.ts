@@ -20,11 +20,13 @@ export class BrainstormViewComponent implements OnInit {
   public ideaDetailCallback: Function;
 
   ideas: IdeaList;
+  rootIdea: Idea;
   selectedIdea: Idea;
   hoverIdea: Idea;
   newIdeaTitle: string;
+  idArray: number[];
 
-  currentIndex: number;
+  latestId: number;
 
   options = {
     nodes: {
@@ -46,6 +48,8 @@ export class BrainstormViewComponent implements OnInit {
   
   ngOnInit() {
     var alias = this;
+    this.latestId=0;
+    this.idArray = new Array();
     var container = document.getElementById('brainstorm-view');
     this.ideaDetailCallback = this.updateNodeLabel.bind(this);
 
@@ -92,6 +96,12 @@ export class BrainstormViewComponent implements OnInit {
     this.drawElementAt('add-view', pointer);
   }
 
+  showRemoveView() {
+    var pointer = this.getPointerFromElement('detail-view');
+    this.hideAllViews();
+    this.drawElementAt('remove-view', pointer)
+  }
+
   getPointerFromElement(elementId: string) {
     var elem = document.getElementById('idea-view');
     var xStr = document.getElementById('idea-view').style.left;
@@ -128,6 +138,7 @@ export class BrainstormViewComponent implements OnInit {
   hideAllViews() {
     this.hideAddIdeaView();
     this.hideDetailView();
+    this.hideRemoveView();
     this.hideQuickView();
   }
 
@@ -140,6 +151,10 @@ export class BrainstormViewComponent implements OnInit {
     document.getElementById('idea-view').style.visibility="hidden";
   }
 
+  hideRemoveView() {
+    document.getElementById('remove-view').style.visibility="hidden";
+  }
+
   hideQuickView() {
     //console.log("Hiding quick view");
     //document.getElementById('quick-view').style.visibility="hidden";
@@ -147,23 +162,22 @@ export class BrainstormViewComponent implements OnInit {
 
   updateSelectedIdea(index: number) {
     this.selectedIdea = this.ideas.getIdeaFromIndex(index);
-    console.log(this.selectedIdea);
+    console.log("Selected Idea: " + this.selectedIdea);
   }
 
   updateHoveredIdea(index: number) {
     this.hoverIdea = this.ideas.getIdeaFromIndex(index);
-    console.log(this.hoverIdea);
   }
 
   updateNodeLabel() {
     this.nodes.update({id:this.selectedIdea.id, label:this.selectedIdea.title});
-    console.log(this.nodes);
   }
 
   createIdea() {
     console.log("Creating idea: " + this.newIdeaTitle);
-    var newIdea = new Idea(this.currentIndex++, this.newIdeaTitle, this.selectedIdea);
+    var newIdea = new Idea(this.loadNextId(), this.newIdeaTitle, this.selectedIdea);
     this.selectedIdea.addChild(newIdea);
+    this.ideas.setList(this.rootIdea);
     this.nodes.add({id: newIdea.id, label: newIdea.title });
     this.edges.add( {from: newIdea.parent.id, to: newIdea.id });
     this.hideAddIdeaView();
@@ -171,9 +185,20 @@ export class BrainstormViewComponent implements OnInit {
 
   removeIdea() {
     console.log("Removing idea");
+
+    if(this.selectedIdea.parent != null) {
+      this.selectedIdea.parent.removeChild(this.selectedIdea);
+      this.ideas.setList(this.rootIdea);
+      this.nodes.remove(this.selectedIdea.id);
+      this.selectedIdea = null;
+    } else {
+      console.log("Attempting to delete root node");
+    }
+    this.hideAllViews();
   }
 
   initIdeas(root: Idea) {
+    this.rootIdea = root;
     this.ideas = new IdeaList( root );
     this.selectedIdea = this.ideas.getIdeaFromIndex(0);
     this.loadIdeas();
@@ -185,7 +210,17 @@ export class BrainstormViewComponent implements OnInit {
       if(idea.parent != null){
         this.edges.add( {from:idea.parent.id, to: idea.id} );
       }
+      this.idArray.push(idea.id);
     }
   }
 
+  loadNextId() {
+    var newNum = this.latestId + 1;
+    while(this.idArray.indexOf(newNum) > -1) {
+      newNum++;
+    }
+
+    this.latestId = newNum;
+    return newNum;
+  }
 }

@@ -25,3 +25,10 @@ quick-view {
     visibility: hidden;
     background-color: whitesmoke;
 }
+
+#remove-view {
+    border: 1px solid silver;
+    position: absolute;
+    visibility: hidden;
+    background-color: whitesmoke;
+}

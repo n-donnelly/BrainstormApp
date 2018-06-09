@@ -21,7 +21,6 @@ export class IdeaList {
     }
 
     getIdeaFromIndex(id: number) : Idea {
-        console.log("Looking for at index:", id);
         for(let idea of this._ideas) {
             if(idea.id === id) {
                 return idea;

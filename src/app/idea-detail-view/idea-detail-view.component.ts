@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
 import { Idea } from '../model/idea';
 
 @Component({
@@ -6,21 +6,16 @@ import { Idea } from '../model/idea';
   templateUrl: './idea-detail-view.component.html',
   styleUrls: ['./idea-detail-view.component.css']
 })
-export class IdeaDetailViewComponent implements OnInit, OnChanges {
+export class IdeaDetailViewComponent implements OnInit {
 
   @Input() idea: Idea;
   @Output() labelUpdate: EventEmitter<any> = new EventEmitter();
   @Output() createIdea: EventEmitter<any> = new EventEmitter();
-  @Output() deleteIdea: EventEmitter<any> = new EventEmitter();
+  @Output() removeIdea: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
-  }
-
-  ngOnChanges() {
-    console.log("Changed: ", this.idea.title);
-    console.log(this.idea);
   }
 
   updateIdea() {
@@ -35,8 +30,8 @@ export class IdeaDetailViewComponent implements OnInit, OnChanges {
     this.createIdea.emit();
   }
 
-  removeIdea() {
+  removeSelectedIdea() {
     console.log("Removing idea");
-    this.deleteIdea.emit();
+    this.removeIdea.emit();
   }
 }

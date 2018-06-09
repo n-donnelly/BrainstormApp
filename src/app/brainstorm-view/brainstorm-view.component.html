@@ -13,7 +13,14 @@
 
 <div id="add-view">
     <h2>Create New Idea</h2>
-    <input id="idea_title_input" placeholder="New Idea">
+    <input id="idea_title_input" [(ngModel)]="newIdeaTitle" placeholder="New Idea">
     <button (click)="createIdea()">Create</button>
     <button (click)="hideAddIdeaView()">Cancel</button>
+</div>
+
+<div id="remove-view">
+    <h2>Are You Sure?</h2>
+    <span>Are you sure you want to delete this element and it's children?</span>
+    <button (click)="removeIdea()">Remove</button>
+    <button (click)="hideRemoveView()">Cancel</button>
 </div>
