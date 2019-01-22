@@ -1,5 +1,8 @@
 # BrainstormApp
 
+Angular App for Brainstorming ideas - currently only works as a local app. 
+Still a work in progress
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.2.
 
 ## Development server
